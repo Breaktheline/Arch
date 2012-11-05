@@ -1,0 +1,15 @@
+User-specific files
+
+*.sdf
+*.opensdf
+*.suo
+*.user
+*.o
+
+Others
+
+[Bb]in
+[Oo]bj
+ipch
+Debug
+_ReSharper.Arch
