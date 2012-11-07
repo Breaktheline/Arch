@@ -54,7 +54,6 @@ public:
 	void Clear();
 private:
 
-
 	Node** _nodes;
 };
 

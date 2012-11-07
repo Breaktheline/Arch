@@ -11,7 +11,7 @@ public:
 	void Decode(FILE* inputFile, FILE* outputFile);
 
 private:
-	HashTree hashTree;
+	HashTree _hashTree;
 };
 
 #endif

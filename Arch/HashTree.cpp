@@ -14,7 +14,7 @@ HashTree::HashTree()
 	}
 }
 
-unsigned int HashTree::GetHash(byte symbolCode, int parentCode)
+unsigned int HashTree::GetHash(byte symbolCode, unsigned int parentCode)
 {
 	unsigned int key = parentCode << 1;
 	key ^= symbolCode;
@@ -22,7 +22,7 @@ unsigned int HashTree::GetHash(byte symbolCode, int parentCode)
 	return key;
 }
 
-int HashTree::FindNodeIndex(byte symbolCode, int parentCode, unsigned int hashCode)
+int HashTree::FindNodeIndex(byte symbolCode, unsigned int parentCode, unsigned int hashCode)
 {
 	Node* node = _nodes[hashCode];
 

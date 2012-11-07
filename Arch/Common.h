@@ -6,6 +6,7 @@ typedef unsigned char byte;
 #define NIL -1
 
 #include <stdlib.h>
+#include <math.h>
 
 struct ErrorMessages
 {

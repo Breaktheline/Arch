@@ -8,10 +8,21 @@
 class LzwEncoder
 {
 public:
+	LzwEncoder();
 	void Encode(const char* inputFileName, const char* outputFileName);
-	byte ReadNextByte( FILE* inputFile );
+
+	void ChangeCodeLength( int nodeIndex );
+
+	void AddNewNode(byte symbol, unsigned char hashCode, FILE* outputFile);
+
 private:
-	HashTree hashTree;
+	byte ReadNextByte(FILE* inputFile);
+	void WriteCode(FILE* outputFile, int code);
+
+	HashTree _hashTree;
+	int _bitsInCode;
+	int _codeSize;
+	unsigned int _parent;
 };
 
 #endif

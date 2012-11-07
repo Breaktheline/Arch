@@ -1,9 +1,14 @@
 #include "LzwEncoder.h"
 
+LzwEncoder::LzwEncoder()
+{
+	_bitsInCode = MIN_CODE_LEN;
+	_codeSize = pow(2.0, _bitsInCode);
+}
 
 void LzwEncoder::Encode(const char* inputFileName, const char* outputFileName)
 {
-	FILE* inputFile = fopen(inputFileName, "r");
+	FILE* inputFile = fopen(inputFileName, "rb");
 	if (inputFile == NULL)
 	{
 		printf("Can't open file %s", inputFileName);
@@ -17,42 +22,71 @@ void LzwEncoder::Encode(const char* inputFileName, const char* outputFileName)
 		return;
 	}
 
-	int parent = NIL;
+	_parent = ReadNextByte(inputFile);
+	
 	while (!feof(inputFile))
 	{
 		byte symbol = ReadNextByte(inputFile);
-		unsigned char hashCode = hashTree.GetHash(symbol, parent);
+		if (symbol == EOF)
+		{
+			break;
+		}
 
-		int nodeIndex = hashTree.FindNodeIndex(symbol, parent, hashCode);
+		unsigned char hashCode = _hashTree.GetHash(symbol, _parent);
+		int nodeIndex = _hashTree.FindNodeIndex(symbol, _parent, hashCode);
 		
-		//Если строки не существует в таблице.
+		//Если строки не существует в таблице, то добавляем.
 		if (nodeIndex == NIL)
 		{
-			Node* node = hashTree.AddNode(symbol, parent, hashCode);
-
-			//Если таблица заполнена, очищаем, заносим символ без родителя.
-			if (node == NULL)
-			{
-				//TODO:
-				hashTree.Clear();
-				parent = NIL;
-				node = hashTree.AddNode(symbol, parent, hashCode);
-			}
-
-			parent = symbol;
+			AddNewNode(symbol, hashCode, outputFile);
 		}
-		//Если строка в таблице есть.
+		//Если строка в таблице есть, меняем родителя на код строки.
 		else
 		{
-			parent = nodeIndex;
+			ChangeCodeLength(nodeIndex);
+			_parent = nodeIndex;
 		}
-
 	}
-
 }
 
 byte LzwEncoder::ReadNextByte(FILE* inputFile)
 {
+	byte next;
+	read(inputFile, &next, sizeof(next));
+
+	return next;
+}
+
+void LzwEncoder::WriteCode(FILE* outputFile, int code)
+{
 	//TODO
-	return 1;
+}
+
+void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode, FILE* outputFile)
+{
+	Node* node = _hashTree.AddNode(symbol, _parent, hashCode);
+
+	//Если таблица заполнена, очищаем, добавляем строку, если состоит из 2 символов.
+	if (node == NULL)
+	{
+		_hashTree.Clear();
+		if (_parent < CHARS_COUNT)
+		{
+			node = _hashTree.AddNode(symbol, _parent, hashCode);
+		}
+	}
+
+	//в файл выводится код символа родителя.
+	WriteCode(outputFile, _parent);
+	_parent = symbol;
+}
+
+void LzwEncoder::ChangeCodeLength(int nodeIndex)
+{
+	//Увеличиваем длину кода, если индекс в таблице возрос.
+	if (nodeIndex >= _codeSize )
+	{
+		_bitsInCode++;
+		_codeSize = pow(2.0, _bitsInCode);
+	}
 }
