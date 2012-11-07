@@ -1,101 +1,104 @@
 #include "gtest/gtest.h"
 #include "HashTree.h"
 
-TEST(HashTreeTest, ShouldFindFirstSymbols)
+TEST(HashTreeTest, ShouldNotFindNewNode)
 {
 	HashTree hashTree;
 
-	Node* node1 = hashTree.GetNode('a');
-	Node* node2 = hashTree.GetNode(255);
+	unsigned int hash = hashTree.GetHash(98, 970);
+	int index = hashTree.FindNodeIndex(98, 970, hash);
 
-	ASSERT_FALSE(node1->IsEmpty());
-	ASSERT_EQ(-1, node1->parent);
-	ASSERT_EQ(97, node1->symbol);
-	ASSERT_EQ(97, node1->index);
-
-	ASSERT_FALSE(node2->IsEmpty());
-	ASSERT_EQ(-1, node2->parent);
-	ASSERT_EQ(255, node2->symbol);
-	ASSERT_EQ(255, node2->index);
+	ASSERT_EQ(2038, hash);
+	ASSERT_EQ(NIL, index);
 }
 
-TEST(HashTreeTest, ShouldFindNewNode)
+TEST(HashTreeTest, ShouldAddNewNode)
 {
 	HashTree hashTree;
 
-	Node* node1 = hashTree.GetNode('b', 97);
+	unsigned int hash = hashTree.GetHash(98, 970);
+	Node* node = hashTree.AddNode(98, 970, hash);
 
-	ASSERT_FALSE(node1->IsEmpty());
-	ASSERT_EQ(97, node1->parent);
-	ASSERT_EQ(98, node1->symbol);
-	ASSERT_EQ(3138, node1->index);
+	ASSERT_TRUE(node != NULL);
+	ASSERT_EQ(2038, hash);
+	ASSERT_EQ(2038, node->index);
+	ASSERT_EQ(98, node->symbol);
+	ASSERT_EQ(970, node->parent);
 }
 
 TEST(HashTreeTest, ShouldFindExistingNode)
 {
 	HashTree hashTree;
 
-	Node* node1 = hashTree.GetNode(98, 97);
-	Node* node2 = hashTree.GetNode(98, 97);
+	unsigned int hash = hashTree.GetHash(98, 970);
+	Node* node = hashTree.AddNode(98, 970, hash);
+	int index = hashTree.FindNodeIndex(98, 970, hash);
 
-	ASSERT_FALSE(node1->IsEmpty());
-	ASSERT_FALSE(node2->IsEmpty());
-
-	ASSERT_EQ(node1, node2);
-	ASSERT_EQ(3138, node1->index);
-	ASSERT_EQ(3138, node2->index);
+	ASSERT_NE(NIL, index);
+	ASSERT_EQ(2038, index);
 }
 
 TEST(HashTreeTest, ShouldFindIfKeyIsGreaterThanTableSize)
 {
 	HashTree hashTree;
 
-	Node* node1 = hashTree.GetNode(255, 65535);
+	unsigned int hash = hashTree.GetHash(255, 65535);
+	Node* node = hashTree.AddNode(255, 65535, hash);
+	int index = hashTree.FindNodeIndex(255, 65535, hash);
 
-	ASSERT_FALSE(node1->IsEmpty());
-	ASSERT_EQ(65311, node1->index);
+	ASSERT_EQ(65281, hash);
+	ASSERT_TRUE(node != NULL);
+	ASSERT_EQ(65281, node->index);
+	ASSERT_EQ(255, node->symbol);
+	ASSERT_EQ(65535, node->parent);
+	ASSERT_EQ(65281, index);
 }
 
 TEST(HashTreeTest, ShouldFindIfCollisionHappened)
 {
 	HashTree hashTree;
+	unsigned int hash1 = hashTree.GetHash(4, 25);
+	unsigned int hash2 = 4;
+	Node* node1 = hashTree.AddNode(4, 25, hash1);
+	int index1 = hashTree.FindNodeIndex(4, 25, hash1);
 
-	Node* node1 = hashTree.GetNode(4, 2048);
-	Node* node2 = hashTree.GetNode(4);
-
-	ASSERT_FALSE(node1 == node2);
-	ASSERT_FALSE(node1->IsEmpty());
-	ASSERT_EQ(4, node1->index);
-	ASSERT_EQ(2048, node1->parent);
+	ASSERT_EQ(54, node1->index);
+	ASSERT_EQ(25, node1->parent);
 	ASSERT_EQ(4, node1->symbol);
 
-	ASSERT_FALSE(node2->IsEmpty());
-	ASSERT_EQ(4, node2->index);
-	ASSERT_EQ(-1, node2->parent);
-	ASSERT_EQ(4, node2->symbol);
+	ASSERT_EQ(54, hash1);
+	ASSERT_EQ(256, index1);
 }
 
 TEST(HashTreeTest, ShouldFindString)
 {
 	HashTree hashTree;
 
-	hashTree.GetNode(99, 56);
-	hashTree.GetNode(103,99);
-	hashTree.GetNode(103,103);
-	Node* node = hashTree.GetNode(107,103);
+	unsigned int hash = hashTree.GetHash(107,103);
+	Node* node1 = hashTree.AddNode(99, 56, hashTree.GetHash(99, 56));
+	Node* node2 = hashTree.AddNode(103,99, hashTree.GetHash(103,99));
+	Node* node3 = hashTree.AddNode(103,103, hashTree.GetHash(103,103));
+	Node* node4 = hashTree.AddNode(107,103, hash);
 
-	ASSERT_FALSE(node->IsEmpty());
-	ASSERT_EQ(103, node->parent);
-	ASSERT_EQ(107, node->symbol);
+	int index = hashTree.FindNodeIndex(107,103, hash);
+
+	ASSERT_TRUE(node1 != NULL);
+	ASSERT_TRUE(node2 != NULL);
+	ASSERT_TRUE(node3 != NULL);
+	ASSERT_TRUE(node4 != NULL);
+
+	ASSERT_EQ(165, hash);
+	ASSERT_EQ(259, index);
 }
 
-TEST(HashTreeTest, ShouldNotFindIfTableIsFull)
+
+TEST(HashTreeTest, ShouldNotAddIfTableIsFull)
 {
 	HashTree hashTree;
 	Node* node;
 	for(int i = 0; i < 65536; i++)
 	{
-		node = hashTree.GetNode(99, i);
+		node = hashTree.AddNode(99, i, hashTree.GetHash(99, i));
 	}
 
 	ASSERT_TRUE(node == NULL);
@@ -107,7 +110,7 @@ TEST(HashTreeTest, ShouldFindAllIfTableIsMoreThenCodes)
 	Node* node;
 	for(int i = 0; i < 32768; i++)
 	{
-		node = hashTree.GetNode(99, i);
+		node = hashTree.AddNode(99, i, hashTree.GetHash(99, i));
 		ASSERT_TRUE(node != NULL);
 	}
 }

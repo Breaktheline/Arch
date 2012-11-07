@@ -78,14 +78,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
     <ClCompile Include="HashTree.cpp" />
-    <ClCompile Include="Lzw.cpp" />
+    <ClCompile Include="LzwDecoder.cpp" />
+    <ClCompile Include="LzwEncoder.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common.h" />
     <ClInclude Include="HashTree.h" />
-    <ClInclude Include="Lzw.h" />
+    <ClInclude Include="LzwDecoder.h" />
+    <ClInclude Include="LzwEncoder.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

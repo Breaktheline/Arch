@@ -1,13 +1,10 @@
 #ifndef H_HASH_TREE
 #define H_HASH_TREE
 
-#define MIN_CODE_LEN 9
-#define MAX_CODE_LEN 15
 #define CHARS_COUNT 256
 #define HASH_SIZE 65536
-typedef unsigned char byte;
 
-#include <stdlib.h>
+#include "Common.h"
 
 struct Node
 {
@@ -25,7 +22,7 @@ struct Node
 
 	bool IsEmpty()
 	{
-		return index == -1 && parent == -1;
+		return index == NIL && parent == NIL;
 	}
 
 	bool IsEqual(byte symbolCode, int parentCode)
@@ -38,14 +35,25 @@ struct Node
 	byte symbol;
 };
 
+struct GetNodeResult
+{
+	bool exists;
+	int pointer;
+};
+
 class HashTree
 {
 public:
 	HashTree();
 	~HashTree();
-	Node* GetNode(byte suffixChar, int parentCode = -1);
+	unsigned int GetHash(byte symbolCode, int parentCode);
+	//возвращает NIL, если узла нет.
+	int FindNodeIndex(byte symbolCode, int parentCode, unsigned int hashCode);
+	//возвращает NULL, если таблица заполнена.
+	Node* AddNode(byte symbolCode, int parentCode, unsigned int hashCode);
+	void Clear();
 private:
-	unsigned int GetHash(byte suffixChar, int parentCode);
+
 
 	Node** _nodes;
 };
