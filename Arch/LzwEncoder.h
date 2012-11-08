@@ -10,11 +10,11 @@ class LzwEncoder
 {
 public:
 	LzwEncoder(FILE* inputFile, FILE* outputFile);
+	~LzwEncoder();
 	void Encode();
 
 private:
-	byte ReadNextByte();
-	void WriteCode(int code);
+	int ReadNextByte();
 	void AddNewNode(byte symbol, unsigned char hashCode);
 
 	FILE* _inputFile;

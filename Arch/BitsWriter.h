@@ -7,6 +7,7 @@ class BitsWriter
 {
 public:
 	BitsWriter(FILE* outputFile);
+	~BitsWriter();
 	void AddBitsToBuffer(int bits);
 	void WriteReminder();
 private:

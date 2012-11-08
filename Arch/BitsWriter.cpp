@@ -43,3 +43,8 @@ void BitsWriter::WriteReminder()
 		fputc(_buffer, _outputFile);
 	}
 }
+
+BitsWriter::~BitsWriter()
+{
+	fclose(_outputFile);
+}

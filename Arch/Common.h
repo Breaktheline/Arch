@@ -2,7 +2,7 @@
 #define H_COMMON
 
 typedef unsigned char byte;
-#define MIN_CODE_LEN 9
+#define MIN_CODE_LEN 8
 #define MAX_CODE_LEN 15
 #define NIL -1
 

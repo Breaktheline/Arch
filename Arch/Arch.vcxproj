@@ -81,6 +81,7 @@
     <ClCompile Include="BitsWriter.cpp" />
     <ClCompile Include="BitsWriterTests.cpp" />
     <ClCompile Include="Common.cpp" />
+    <ClCompile Include="EncoderTests.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
     <ClCompile Include="HashTree.cpp" />
     <ClCompile Include="LzwDecoder.cpp" />

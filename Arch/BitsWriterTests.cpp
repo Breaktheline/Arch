@@ -7,7 +7,6 @@ TEST(BitsWriterTest, ShouldWriteByte)
 	BitsWriter bitsWriter(outputFile);
 	bitsWriter.AddBitsToBuffer(153);
 	bitsWriter.WriteReminder();
-	fclose(outputFile);
 }
 
 TEST(BitsWriterTest, ShouldWriteSeveralBytes)
@@ -18,7 +17,6 @@ TEST(BitsWriterTest, ShouldWriteSeveralBytes)
 	bitsWriter.AddBitsToBuffer(90);
 	bitsWriter.AddBitsToBuffer(222);
 	bitsWriter.WriteReminder();
-	fclose(outputFile);
 }
 
 TEST(BitsWriterTest, ShouldChangeCodeSize)
@@ -30,7 +28,6 @@ TEST(BitsWriterTest, ShouldChangeCodeSize)
 	bitsWriter.AddBitsToBuffer(522);
 	bitsWriter.AddBitsToBuffer(7522);
 	bitsWriter.WriteReminder();
-	fclose(outputFile);
 }
 
 TEST(BitsWriterTest, ShouldNotWriteEmptyReminder)
@@ -38,5 +35,4 @@ TEST(BitsWriterTest, ShouldNotWriteEmptyReminder)
 	FILE* outputFile = fopen("Tests/test", "wb");
 	BitsWriter bitsWriter(outputFile);
 	bitsWriter.WriteReminder();
-	fclose(outputFile);
 }

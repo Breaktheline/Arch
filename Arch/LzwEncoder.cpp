@@ -6,17 +6,19 @@ LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 	_bitsWriter = new BitsWriter(outputFile);
 }
 
+LzwEncoder::~LzwEncoder()
+{
+	fclose(_inputFile);
+	delete _bitsWriter;
+}
+
 void LzwEncoder::Encode()
 {
 	_parent = ReadNextByte();
-	
+
 	while (!feof(_inputFile))
 	{
 		byte symbol = ReadNextByte();
-		if (symbol == EOF)
-		{
-			break;
-		}
 
 		unsigned char hashCode = _hashTree.GetHash(symbol, _parent);
 		int nodeIndex = _hashTree.FindNodeIndex(symbol, _parent, hashCode);
@@ -32,12 +34,14 @@ void LzwEncoder::Encode()
 			_parent = nodeIndex;
 		}
 	}
+
+	_bitsWriter->WriteReminder();
 }
 
-byte LzwEncoder::ReadNextByte()
+int LzwEncoder::ReadNextByte()
 {
-	byte next;
-	fread(&next, 1, 1, _inputFile);
+	int next;
+	next = fgetc(_inputFile);
 
 	return next;
 }
@@ -60,5 +64,3 @@ void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
 	_bitsWriter->AddBitsToBuffer(_parent);
 	_parent = symbol;
 }
-
-
