@@ -4,24 +4,22 @@
 #include "stdio.h"
 #include "Common.h"
 #include "HashTree.h"
+#include "BitsWriter.h"
 
 class LzwEncoder
 {
 public:
-	LzwEncoder();
-	void Encode(const char* inputFileName, const char* outputFileName);
-
-	void ChangeCodeLength( int nodeIndex );
-
-	void AddNewNode(byte symbol, unsigned char hashCode, FILE* outputFile);
+	LzwEncoder(FILE* inputFile, FILE* outputFile);
+	void Encode();
 
 private:
-	byte ReadNextByte(FILE* inputFile);
-	void WriteCode(FILE* outputFile, int code);
+	byte ReadNextByte();
+	void WriteCode(int code);
+	void AddNewNode(byte symbol, unsigned char hashCode);
 
+	FILE* _inputFile;
+	BitsWriter* _bitsWriter;
 	HashTree _hashTree;
-	int _bitsInCode;
-	int _codeSize;
 	unsigned int _parent;
 };
 

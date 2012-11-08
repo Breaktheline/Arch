@@ -1,32 +1,18 @@
 #include "LzwEncoder.h"
 
-LzwEncoder::LzwEncoder()
+LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 {
-	_bitsInCode = MIN_CODE_LEN;
-	_codeSize = pow(2.0, _bitsInCode);
+	_inputFile = inputFile;
+	_bitsWriter = new BitsWriter(outputFile);
 }
 
-void LzwEncoder::Encode(const char* inputFileName, const char* outputFileName)
+void LzwEncoder::Encode()
 {
-	FILE* inputFile = fopen(inputFileName, "rb");
-	if (inputFile == NULL)
-	{
-		printf("Can't open file %s", inputFileName);
-		return;
-	}
-
-	FILE* outputFile = fopen(outputFileName, "wb");
-	if (outputFile == NULL)
-	{
-		printf("Can't open file %s", outputFile);
-		return;
-	}
-
-	_parent = ReadNextByte(inputFile);
+	_parent = ReadNextByte();
 	
-	while (!feof(inputFile))
+	while (!feof(_inputFile))
 	{
-		byte symbol = ReadNextByte(inputFile);
+		byte symbol = ReadNextByte();
 		if (symbol == EOF)
 		{
 			break;
@@ -38,31 +24,25 @@ void LzwEncoder::Encode(const char* inputFileName, const char* outputFileName)
 		//≈сли строки не существует в таблице, то добавл€ем.
 		if (nodeIndex == NIL)
 		{
-			AddNewNode(symbol, hashCode, outputFile);
+			AddNewNode(symbol, hashCode);
 		}
 		//≈сли строка в таблице есть, мен€ем родител€ на код строки.
 		else
 		{
-			ChangeCodeLength(nodeIndex);
 			_parent = nodeIndex;
 		}
 	}
 }
 
-byte LzwEncoder::ReadNextByte(FILE* inputFile)
+byte LzwEncoder::ReadNextByte()
 {
 	byte next;
-	read(inputFile, &next, sizeof(next));
+	fread(&next, 1, 1, _inputFile);
 
 	return next;
 }
 
-void LzwEncoder::WriteCode(FILE* outputFile, int code)
-{
-	//TODO
-}
-
-void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode, FILE* outputFile)
+void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
 {
 	Node* node = _hashTree.AddNode(symbol, _parent, hashCode);
 
@@ -77,16 +57,8 @@ void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode, FILE* outputFil
 	}
 
 	//в файл выводитс€ код символа родител€.
-	WriteCode(outputFile, _parent);
+	_bitsWriter->AddBitsToBuffer(_parent);
 	_parent = symbol;
 }
 
-void LzwEncoder::ChangeCodeLength(int nodeIndex)
-{
-	//”величиваем длину кода, если индекс в таблице возрос.
-	if (nodeIndex >= _codeSize )
-	{
-		_bitsInCode++;
-		_codeSize = pow(2.0, _bitsInCode);
-	}
-}
+

@@ -78,6 +78,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BitsWriter.cpp" />
+    <ClCompile Include="BitsWriterTests.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
     <ClCompile Include="HashTree.cpp" />
@@ -86,6 +88,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BitsWriter.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="HashTree.h" />
     <ClInclude Include="LzwDecoder.h" />

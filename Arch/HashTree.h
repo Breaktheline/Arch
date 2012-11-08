@@ -35,20 +35,14 @@ struct Node
 	byte symbol;
 };
 
-struct GetNodeResult
-{
-	bool exists;
-	int pointer;
-};
-
 class HashTree
 {
 public:
 	HashTree();
 	~HashTree();
-	unsigned int GetHash(byte symbolCode, int parentCode);
+	unsigned int GetHash(byte symbolCode, unsigned int parentCode);
 	//возвращает NIL, если узла нет.
-	int FindNodeIndex(byte symbolCode, int parentCode, unsigned int hashCode);
+	int FindNodeIndex(byte symbolCode, unsigned int parentCode, unsigned int hashCode);
 	//возвращает NULL, если таблица заполнена.
 	Node* AddNode(byte symbolCode, int parentCode, unsigned int hashCode);
 	void Clear();
