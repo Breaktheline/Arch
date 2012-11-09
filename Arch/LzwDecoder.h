@@ -5,6 +5,7 @@
 #include "Common.h"
 #include "HashTree.h"
 #include "BitsReader.h"
+#include "TList.h"
 
 class LzwDecoder
 {
@@ -12,9 +13,12 @@ public:
 	LzwDecoder(FILE* inputFile, FILE* outputFile);
 	~LzwDecoder();
 	void Decode();
-	
+
 private:
-	byte GetNextSymbol(int code);
+	TList<byte>* GetReversedStringByCode(int code);
+	void WriteOutput(TList<byte>* symbols);
+	void WriteOutput(byte code);
+	void AddNewNode(byte symbolCode, unsigned int hashCode);
 
 	FILE* _outputFile;
 	BitsReader* _bitsReader;

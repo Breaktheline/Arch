@@ -98,6 +98,7 @@
     <ClInclude Include="HashTree.h" />
     <ClInclude Include="LzwDecoder.h" />
     <ClInclude Include="LzwEncoder.h" />
+    <ClInclude Include="TList.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

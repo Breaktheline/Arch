@@ -22,6 +22,11 @@ unsigned int HashTree::GetHash(byte symbolCode, unsigned int parentCode)
 	return key;
 }
 
+Node* HashTree::FindNode(unsigned int index)
+{
+	return _nodes[index];
+}
+
 int HashTree::FindNodeIndex(byte symbolCode, unsigned int parentCode, unsigned int hashCode)
 {
 	Node* node = _nodes[hashCode];
@@ -143,3 +148,4 @@ void HashTree::Clear()
 		_nodes[i] = NULL;
 	}
 }
+
