@@ -2,22 +2,14 @@
 #define H_BITS_WRITER
 
 #include "Common.h"
+#include "BinaryFileOperations.h"
 
-class BitsWriter
+class BitsWriter: BinaryFileOperations
 {
 public:
-	BitsWriter(FILE* outputFile);
-	~BitsWriter();
+	BitsWriter(FILE* outputFile): BinaryFileOperations(outputFile) {};
 	void AddBitsToBuffer(int bits);
 	void WriteReminder();
-private:
-	void ChangeCodeLength(int nodeIndex);
-
-	FILE* _outputFile;
-	byte _buffer;
-	int _bufferSize;
-	int _bitsInCode;
-	int _codeSize;
 };
 
 #endif

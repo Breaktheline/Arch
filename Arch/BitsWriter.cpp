@@ -1,50 +1,34 @@
 #include "BitsWriter.h"
 
-BitsWriter::BitsWriter(FILE* outputFile)
+void BitsWriter::AddBitsToBuffer(int code)
 {
-	_outputFile = outputFile;
-	_buffer = 0;
-	_bufferSize = 0;
-	_bitsInCode = MIN_CODE_LEN;
-	_codeSize = pow(2.0, _bitsInCode);
-}
-
-void BitsWriter::AddBitsToBuffer(int nodeIndex)
-{
-	//Увеличиваем длину кода, если индекс в таблице возрос.
-	while (nodeIndex >= _codeSize)
-	{
-		_bitsInCode++;
-		_codeSize = pow(2.0, _bitsInCode);
-	}
-
 	//Добавляем по одному биту и записываем в файл, когда наполнится байт.
-	for (int shift = _bitsInCode; shift > 0; shift--)
+	for(int shift = _bitsInCode; shift > 0; shift--)
 	{
 		//достаем конкретный бит числа.
-		byte bit = (nodeIndex >> (shift - 1)) & 1;
+		byte bit = (code >> (shift - 1)) & 1;
 		bit <<= 7 - _bufferSize;
 		//добавляем бит в буфер.
 		_buffer |= bit;
 		_bufferSize++;
+		//если буфер заполнет, то пишем в файл.
 		if (_bufferSize == 8)
 		{
-			fputc(_buffer, _outputFile);
+			fputc(_buffer, _file);
 			_bufferSize = 0;
 			_buffer = 0;
 		}
 	}
+
+	//Увеличиваем длину кода, если индекс в таблице возрос.
+	ChangeCodeLength(code);
 }
 
 void BitsWriter::WriteReminder()
 {
 	if (_bufferSize > 0)
 	{
-		fputc(_buffer, _outputFile);
+		fputc(_buffer, _file);
 	}
 }
 
-BitsWriter::~BitsWriter()
-{
-	fclose(_outputFile);
-}

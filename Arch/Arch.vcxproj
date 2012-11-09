@@ -78,8 +78,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BinaryFileOperations.cpp" />
+    <ClCompile Include="BitsReader.cpp" />
     <ClCompile Include="BitsWriter.cpp" />
-    <ClCompile Include="BitsWriterTests.cpp" />
+    <ClCompile Include="BitsWriterReaderTests.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="EncoderTests.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
@@ -89,6 +91,8 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BinaryFileOperations.h" />
+    <ClInclude Include="BitsReader.h" />
     <ClInclude Include="BitsWriter.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="HashTree.h" />

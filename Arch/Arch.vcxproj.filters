@@ -36,10 +36,16 @@
     <ClCompile Include="BitsWriter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BitsWriterTests.cpp">
+    <ClCompile Include="EncoderTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EncoderTests.cpp">
+    <ClCompile Include="BitsReader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BitsWriterReaderTests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BinaryFileOperations.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -57,6 +63,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="BitsWriter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BitsReader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BinaryFileOperations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
