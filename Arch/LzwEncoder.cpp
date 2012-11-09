@@ -40,10 +40,7 @@ void LzwEncoder::Encode()
 
 int LzwEncoder::ReadNextByte()
 {
-	int next;
-	next = fgetc(_inputFile);
-
-	return next;
+	return fgetc(_inputFile);
 }
 
 void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
