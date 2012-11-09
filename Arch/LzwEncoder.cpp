@@ -20,7 +20,7 @@ void LzwEncoder::Encode()
 	{
 		byte symbol = ReadNextByte();
 
-		unsigned char hashCode = _hashTree.GetHash(symbol, _parent);
+		unsigned int hashCode = _hashTree.GetHash(symbol, _parent);
 		int nodeIndex = _hashTree.FindNodeIndex(symbol, _parent, hashCode);
 		
 		//≈сли строки не существует в таблице, то добавл€ем.

@@ -33,9 +33,11 @@ void LzwDecoder::Decode()
 		//Получаем закодированную строку и записываем ее в файл.
 		TList<byte>* symbols = GetReversedStringByCode(code);
 		WriteOutput(symbols);
-
 		//Первый символ строки.
 		byte symbolCode = symbols->GetLast();
+
+		delete symbols;
+
 		unsigned int hashCode = _hashTree.GetHash(symbolCode, _parent);
 		int index = _hashTree.FindNodeIndex(symbolCode, _parent, hashCode);
 
