@@ -41,13 +41,13 @@ public:
 	HashTree();
 	~HashTree();
 	unsigned int GetHash(byte symbolCode, unsigned int parentCode);
-	//возвращает NULL, если узла нет.
+	//РІРѕР·РІСЂР°С‰Р°РµС‚ NULL, РµСЃР»Рё СѓР·Р»Р° РЅРµС‚.
 	Node* FindNode(unsigned int index);
 
-	//возвращает NIL, если узла нет.
+	//РІРѕР·РІСЂР°С‰Р°РµС‚ NIL, РµСЃР»Рё СѓР·Р»Р° РЅРµС‚.
 	int FindNodeIndex(byte symbolCode, unsigned int parentCode, unsigned int hashCode);
 
-	//возвращает NULL, если таблица заполнена.
+	//РІРѕР·РІСЂР°С‰Р°РµС‚ NULL, РµСЃР»Рё С‚Р°Р±Р»РёС†Р° Р·Р°РїРѕР»РЅРµРЅР°.
 	Node* AddNode(byte symbolCode, int parentCode, unsigned int hashCode);
 	void Clear();
 private:

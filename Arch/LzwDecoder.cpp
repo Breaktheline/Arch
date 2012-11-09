@@ -30,10 +30,10 @@ void LzwDecoder::Decode()
 			break;
 		}
 
-		//Получаем закодированную строку и записываем ее в файл.
+		//РџРѕР»СѓС‡Р°РµРј Р·Р°РєРѕРґРёСЂРѕРІР°РЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ Рё Р·Р°РїРёСЃС‹РІР°РµРј РµРµ РІ С„Р°Р№Р».
 		TList<byte>* symbols = GetReversedStringByCode(code);
 		WriteOutput(symbols);
-		//Первый символ строки.
+		//РџРµСЂРІС‹Р№ СЃРёРјРІРѕР» СЃС‚СЂРѕРєРё.
 		byte symbolCode = symbols->GetLast();
 
 		delete symbols;
@@ -41,24 +41,24 @@ void LzwDecoder::Decode()
 		unsigned int hashCode = _hashTree.GetHash(symbolCode, _parent);
 		int index = _hashTree.FindNodeIndex(symbolCode, _parent, hashCode);
 
-		//Если строки еще нет, то добавляем.
+		//Р•СЃР»Рё СЃС‚СЂРѕРєРё РµС‰Рµ РЅРµС‚, С‚Рѕ РґРѕР±Р°РІР»СЏРµРј.
 		if (index == NIL)
 		{
 			AddNewNode(symbolCode, hashCode);
 		}
 
-		//родителем является последний символ закодированной строки.
+		//СЂРѕРґРёС‚РµР»РµРј СЏРІР»СЏРµС‚СЃСЏ РїРѕСЃР»РµРґРЅРёР№ СЃРёРјРІРѕР» Р·Р°РєРѕРґРёСЂРѕРІР°РЅРЅРѕР№ СЃС‚СЂРѕРєРё.
 		_parent = code;
 	}
 
 }
 
-//Возвращает строку, представленную кодом в обратном порядке.
+//Р’РѕР·РІСЂР°С‰Р°РµС‚ СЃС‚СЂРѕРєСѓ, РїСЂРµРґСЃС‚Р°РІР»РµРЅРЅСѓСЋ РєРѕРґРѕРј РІ РѕР±СЂР°С‚РЅРѕРј РїРѕСЂСЏРґРєРµ.
 TList<byte>* LzwDecoder::GetReversedStringByCode(int code)
 {
 	TList<byte>* symbols = new TList<byte>();
 
-	//Если это код единственного символа.
+	//Р•СЃР»Рё СЌС‚Рѕ РєРѕРґ РµРґРёРЅСЃС‚РІРµРЅРЅРѕРіРѕ СЃРёРјРІРѕР»Р°.
 	if (code < CHARS_COUNT)
 	{
 		symbols->Add(code);
@@ -67,7 +67,7 @@ TList<byte>* LzwDecoder::GetReversedStringByCode(int code)
 
 	Node* node = _hashTree.FindNode(code);
 
-	//Пока не дойдем до конца строки.
+	//РџРѕРєР° РЅРµ РґРѕР№РґРµРј РґРѕ РєРѕРЅС†Р° СЃС‚СЂРѕРєРё.
 	while(node->parent != NIL)
 	{
 		symbols->Add(node->symbol);
