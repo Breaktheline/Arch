@@ -1,4 +1,4 @@
-﻿#include "LzwEncoder.h"
+#include "LzwEncoder.h"
 
 LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 {
