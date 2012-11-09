@@ -1,4 +1,4 @@
-#include "LzwEncoder.h"
+ï»¿#include "LzwEncoder.h"
 
 LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 {
@@ -20,16 +20,16 @@ void LzwEncoder::Encode()
 	{
 		byte symbol = ReadNextByte();
 
-		//Èùåì íîâóþ ñòðîêó
+		//Ð˜Ñ‰ÐµÐ¼ Ð½Ð¾Ð²ÑƒÑŽ ÑÑ‚Ñ€Ð¾ÐºÑƒ
 		unsigned int hashCode = _hashTree.GetHash(symbol, _parent);
 		int nodeIndex = _hashTree.FindNodeIndex(symbol, _parent, hashCode);
 		
-		//Åñëè ñòðîêè íå ñóùåñòâóåò â òàáëèöå, òî äîáàâëÿåì.
+		//Ð•ÑÐ»Ð¸ ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð½Ðµ ÑÑƒÑ‰ÐµÑÑ‚Ð²ÑƒÐµÑ‚ Ð² Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ðµ, Ñ‚Ð¾ Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼.
 		if (nodeIndex == NIL)
 		{
 			AddNewNode(symbol, hashCode);
 		}
-		//Åñëè ñòðîêà â òàáëèöå åñòü, ìåíÿåì ðîäèòåëÿ íà êîä ñòðîêè.
+		//Ð•ÑÐ»Ð¸ ÑÑ‚Ñ€Ð¾ÐºÐ° Ð² Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ðµ ÐµÑÑ‚ÑŒ, Ð¼ÐµÐ½ÑÐµÐ¼ Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»Ñ Ð½Ð° ÐºÐ¾Ð´ ÑÑ‚Ñ€Ð¾ÐºÐ¸.
 		else
 		{
 			_parent = nodeIndex;
@@ -48,7 +48,7 @@ void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
 {
 	Node* node = _hashTree.AddNode(symbol, _parent, hashCode);
 
-	//Åñëè òàáëèöà çàïîëíåíà, î÷èùàåì, äîáàâëÿåì ñòðîêó, åñëè ñîñòîèò èç 2 ñèìâîëîâ.
+	//Ð•ÑÐ»Ð¸ Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ð° Ð·Ð°Ð¿Ð¾Ð»Ð½ÐµÐ½Ð°, Ð¾Ñ‡Ð¸Ñ‰Ð°ÐµÐ¼, Ð´Ð¾Ð±Ð°Ð²Ð»ÑÐµÐ¼ ÑÑ‚Ñ€Ð¾ÐºÑƒ, ÐµÑÐ»Ð¸ ÑÐ¾ÑÑ‚Ð¾Ð¸Ñ‚ Ð¸Ð· 2 ÑÐ¸Ð¼Ð²Ð¾Ð»Ð¾Ð².
 	if (node == NULL)
 	{
 		_hashTree.Clear();
@@ -58,7 +58,7 @@ void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
 		}
 	}
 
-	//â ôàéë âûâîäèòñÿ êîä ñèìâîëà ðîäèòåëÿ.
+	//Ð² Ñ„Ð°Ð¹Ð» Ð²Ñ‹Ð²Ð¾Ð´Ð¸Ñ‚ÑÑ ÐºÐ¾Ð´ ÑÐ¸Ð¼Ð²Ð¾Ð»Ð° Ñ€Ð¾Ð´Ð¸Ñ‚ÐµÐ»Ñ.
 	_bitsWriter->AddBitsToBuffer(_parent);
 	_parent = symbol;
 }

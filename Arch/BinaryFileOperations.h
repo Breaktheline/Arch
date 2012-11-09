@@ -1,4 +1,4 @@
-#ifndef H_BINARY_FILE_OPERATIONS
+﻿#ifndef H_BINARY_FILE_OPERATIONS
 #define H_BINARY_FILE_OPERATIONS
 
 #include "Common.h"
