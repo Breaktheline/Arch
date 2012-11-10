@@ -15,7 +15,7 @@ public:
 
 private:
 	int ReadNextByte();
-	void AddNewNode(byte symbol, unsigned char hashCode);
+	void AddNewNode(byte symbol, unsigned int hashCode);
 
 	FILE* _inputFile;
 	BitsWriter* _bitsWriter;

@@ -2,7 +2,7 @@
 #define H_HASH_TREE
 
 #define CHARS_COUNT 256
-#define HASH_SIZE 65536
+#define HASH_SIZE 32768
 
 #include "Common.h"
 

@@ -46,12 +46,12 @@ TEST(HashTreeTest, ShouldFindIfKeyIsGreaterThanTableSize)
 	Node* node = hashTree.AddNode(255, 65535, hash);
 	int index = hashTree.FindNodeIndex(255, 65535, hash);
 
-	ASSERT_EQ(65281, hash);
+	ASSERT_EQ(32513, hash);
 	ASSERT_TRUE(node != NULL);
-	ASSERT_EQ(65281, node->index);
+	ASSERT_EQ(32513, node->index);
 	ASSERT_EQ(255, node->symbol);
 	ASSERT_EQ(65535, node->parent);
-	ASSERT_EQ(65281, index);
+	ASSERT_EQ(32513, index);
 }
 
 TEST(HashTreeTest, ShouldFindIfCollisionHappened)
@@ -96,7 +96,7 @@ TEST(HashTreeTest, ShouldNotAddIfTableIsFull)
 {
 	HashTree hashTree;
 	Node* node;
-	for(int i = 0; i < 65536; i++)
+	for(int i = 0; i < 32768; i++)
 	{
 		node = hashTree.AddNode(99, i, hashTree.GetHash(99, i));
 	}
@@ -108,7 +108,7 @@ TEST(HashTreeTest, ShouldFindAllIfTableIsMoreThenCodes)
 {
 	HashTree hashTree;
 	Node* node;
-	for(int i = 0; i < 32768; i++)
+	for(int i = 0; i < 32512; i++)
 	{
 		node = hashTree.AddNode(99, i, hashTree.GetHash(99, i));
 		ASSERT_TRUE(node != NULL);

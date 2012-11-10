@@ -34,10 +34,50 @@ TEST(DecoderTest, ShouldDecodeFileWithRepetition)
 	decoder.Decode();
 }
 
-TEST(EncoderTest, ShouldEncodeDifFiles)
+TEST(EncoderTest, ShouldEncodeEmptyFiles)
 {
 	FILE* inputFile = fopen("Tests/in3", "rb");
 	FILE* outputFile = fopen("Tests/out3", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
 	encoder.Encode();
 }
+
+TEST(DecoderTest, ShouldDecodeEmptyFiles)
+{
+	FILE* inputFile = fopen("Tests/out3", "rb");
+	FILE* outputFile = fopen("Tests/dec3", "wb");
+	LzwDecoder decoder(inputFile, outputFile);
+	decoder.Decode();
+}
+
+TEST(EncoderTest, ShouldEncodeCaseWhenDecoderDoesntKnowCode)
+{
+	FILE* inputFile = fopen("Tests/in4", "rb");
+	FILE* outputFile = fopen("Tests/out4", "wb");
+	LzwEncoder encoder(inputFile, outputFile);
+	encoder.Encode();
+}
+
+TEST(DecoderTest, ShouldEncodeCaseWhenDecoderDoesntKnowCode)
+{
+	FILE* inputFile = fopen("Tests/out4", "rb");
+	FILE* outputFile = fopen("Tests/dec4", "wb");
+	LzwDecoder decoder(inputFile, outputFile);
+	decoder.Decode();
+}
+
+//TEST(CalgEncodeTest, ShouldEncodeBib)
+//{
+//	FILE* inputFile = fopen("CalgCC/bib", "rb");
+//	FILE* outputFile = fopen("CalgCC/bibOut", "wb");
+//	LzwEncoder encoder(inputFile, outputFile);
+//	encoder.Encode();
+//}
+//
+//TEST(CalgDecodeTest, ShouldDecodeBib)
+//{
+//	FILE* inputFile = fopen("CalgCC/bibOut", "rb");
+//	FILE* outputFile = fopen("CalgCC/bibDec", "wb");
+//	LzwDecoder decoder(inputFile, outputFile);
+//	decoder.Decode();
+//}

@@ -44,7 +44,7 @@ int LzwEncoder::ReadNextByte()
 	return fgetc(_inputFile);
 }
 
-void LzwEncoder::AddNewNode(byte symbol, unsigned char hashCode)
+void LzwEncoder::AddNewNode(byte symbol, unsigned int hashCode)
 {
 	Node* node = _hashTree.AddNode(symbol, _parent, hashCode);
 

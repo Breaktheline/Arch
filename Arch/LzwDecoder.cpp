@@ -58,14 +58,18 @@ TList<byte>* LzwDecoder::GetReversedStringByCode(int code)
 {
 	TList<byte>* symbols = new TList<byte>();
 
-	//Если это код единственного символа.
-	if (code < CHARS_COUNT)
-	{
-		symbols->Add(code);
-		return symbols;
-	}
-
 	Node* node = _hashTree.FindNode(code);
+
+	//Если кода в таблице нет, значит от только что был добавлен декодером.
+	if (node == NULL)
+	{
+		//Значит он образуется соединеним родительского кода и символа начала родителя.
+		TList<byte>* parentString = GetReversedStringByCode(_parent);
+		byte first = parentString->GetLast();
+		//Начальный символ родителя является последним в новой строке.
+		symbols->Add(first);
+		node = _hashTree.FindNode(_parent);
+	}
 
 	//Пока не дойдем до конца строки.
 	while(node->parent != NIL)
