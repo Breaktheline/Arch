@@ -65,19 +65,3 @@ TEST(DecoderTest, ShouldEncodeCaseWhenDecoderDoesntKnowCode)
 	LzwDecoder decoder(inputFile, outputFile);
 	decoder.Decode();
 }
-
-//TEST(CalgEncodeTest, ShouldEncodeBib)
-//{
-//	FILE* inputFile = fopen("CalgCC/bib", "rb");
-//	FILE* outputFile = fopen("CalgCC/bibOut", "wb");
-//	LzwEncoder encoder(inputFile, outputFile);
-//	encoder.Encode();
-//}
-//
-//TEST(CalgDecodeTest, ShouldDecodeBib)
-//{
-//	FILE* inputFile = fopen("CalgCC/bibOut", "rb");
-//	FILE* outputFile = fopen("CalgCC/bibDec", "wb");
-//	LzwDecoder decoder(inputFile, outputFile);
-//	decoder.Decode();
-//}

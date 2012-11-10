@@ -82,6 +82,7 @@
     <ClCompile Include="BitsReader.cpp" />
     <ClCompile Include="BitsWriter.cpp" />
     <ClCompile Include="BitsWriterReaderTests.cpp" />
+    <ClCompile Include="CalgCCTests.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ArchTests.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
