@@ -9,6 +9,7 @@ typedef unsigned char byte;
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include "TList.h"
 
 struct ErrorMessages
 {
