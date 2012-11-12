@@ -13,12 +13,12 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="UnitTests">
+      <UniqueIdentifier>{bbbf0650-16ae-479b-b756-3b4c40ffabdd}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="HashTreeTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="HashTree.cpp">
@@ -39,13 +39,7 @@
     <ClCompile Include="BitsReader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="BitsWriterReaderTests.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="BinaryFileOperations.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ArchTests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CalgCCTests.cpp">
@@ -53,6 +47,18 @@
     </ClCompile>
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ArchTests.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="BitsWriterReaderTests.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTreeTests.cpp">
+      <Filter>UnitTests</Filter>
+    </ClCompile>
+    <ClCompile Include="ParserTests.cpp">
+      <Filter>UnitTests</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,6 @@ Options* Parser::Parse(int argc, char** argv)
 		return NULL;
 	}
 
-	char* arg = argv[1];
 	Options* options = new Options();
 
 	int optionsCount = 0;
@@ -29,14 +28,15 @@ Options* Parser::Parse(int argc, char** argv)
 			options->Stdin = true;
 		}
 
-		while(*++argPointer != NULL)
+		while(*argPointer != NULL)
 		{
 			SetOption(*argPointer, *options);
+			argPointer++;
 		}
 	}
 
 	//количество указанных файлов.
-	for (int i = optionsCount; i < argc; i++)
+	for (int i = optionsCount + 1; i < argc; i++)
 	{
 		options->Files->Add(argv[i]);
 	}

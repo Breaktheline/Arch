@@ -91,6 +91,7 @@
     <ClCompile Include="LzwEncoder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Parser.cpp" />
+    <ClCompile Include="ParserTests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinaryFileOperations.h" />
