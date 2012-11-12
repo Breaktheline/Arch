@@ -78,6 +78,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArchExecutor.cpp" />
     <ClCompile Include="BinaryFileOperations.cpp" />
     <ClCompile Include="BitsReader.cpp" />
     <ClCompile Include="BitsWriter.cpp" />
@@ -85,6 +86,7 @@
     <ClCompile Include="CalgCCTests.cpp" />
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ArchTests.cpp" />
+    <ClCompile Include="CrcMaker.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
     <ClCompile Include="HashTree.cpp" />
     <ClCompile Include="LzwDecoder.cpp" />
@@ -94,13 +96,16 @@
     <ClCompile Include="ParserTests.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArchExecutor.h" />
     <ClInclude Include="BinaryFileOperations.h" />
     <ClInclude Include="BitsReader.h" />
     <ClInclude Include="BitsWriter.h" />
     <ClInclude Include="Common.h" />
+    <ClInclude Include="CrcMaker.h" />
     <ClInclude Include="HashTree.h" />
     <ClInclude Include="LzwDecoder.h" />
     <ClInclude Include="LzwEncoder.h" />
+    <ClInclude Include="Options.h" />
     <ClInclude Include="Parser.h" />
     <ClInclude Include="TList.h" />
   </ItemGroup>

@@ -23,15 +23,23 @@ class AppException
 public:
 	AppException(const char* message)
 	{
-		_message = message;
+		Message = message;
 	}
 
-	const char* GetMessage() 
-	{ 
-		return _message;
-	};
-private:
-	const char* _message;
+	const char* Message;
+};
+
+class FileException
+{
+public:
+	FileException(const char* message, const char* fileName)
+	{
+		Message = message;
+		FileName = fileName;
+	}
+
+	const char* Message;
+	const char* FileName;
 };
 
 #endif
