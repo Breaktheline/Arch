@@ -4,33 +4,42 @@
 
 TEST(BitsWriterTest, ShouldWriteByte)
 {
-	FILE* outputFile = fopen("Tests/test1", "wb");
+	FILE* outputFile = fopen("Results/test1", "wb");
 	BitsWriter bitsWriter(outputFile);
 	bitsWriter.AddBitsToBuffer(153);
-	bitsWriter.WriteReminder();
+	bitsWriter.WriteEndOfFile(1);
 }
 
 TEST(BitsReaderTest, ShouldReadCode)
 {
-	FILE* inputFile = fopen("Tests/test1", "rb");
+	FILE* inputFile = fopen("Results/test1", "rb");
 	BitsReader bitsReader(inputFile);
 	int code = bitsReader.ReadNextBits();
 	ASSERT_EQ(153, code);
 }
 
+TEST(BitsReaderTest, ShouldReadCrc)
+{
+	FILE* inputFile = fopen("Results/test1", "rb");
+	BitsReader bitsReader(inputFile);
+	bool check = bitsReader.CheckCrc();
+
+	ASSERT_TRUE(check);
+}
+
 TEST(BitsWriterTest, ShouldWriteSeveralBytes)
 {
-	FILE* outputFile = fopen("Tests/test2", "wb");
+	FILE* outputFile = fopen("Results/test2", "wb");
 	BitsWriter bitsWriter(outputFile);
 	bitsWriter.AddBitsToBuffer(153);
 	bitsWriter.AddBitsToBuffer(90);
 	bitsWriter.AddBitsToBuffer(222);
-	bitsWriter.WriteReminder();
+	bitsWriter.WriteEndOfFile(3);
 }
 
 TEST(BitsReaderTest, ShouldReadSeveralCodes)
 {
-	FILE* inputFile = fopen("Tests/test2", "rb");
+	FILE* inputFile = fopen("Results/test2", "rb");
 	BitsReader bitsReader(inputFile);
 	int code1 = bitsReader.ReadNextBits();
 	int code2 = bitsReader.ReadNextBits();
@@ -43,18 +52,18 @@ TEST(BitsReaderTest, ShouldReadSeveralCodes)
 
 TEST(BitsWriterTest, ShouldChangeCodeSize)
 {
-	FILE* outputFile = fopen("Tests/test3", "wb");
+	FILE* outputFile = fopen("Results/test3", "wb");
 	BitsWriter bitsWriter(outputFile);
 	bitsWriter.AddBitsToBuffer(153);
 	bitsWriter.AddBitsToBuffer(390);
 	bitsWriter.AddBitsToBuffer(522);
 	bitsWriter.AddBitsToBuffer(1222);
-	bitsWriter.WriteReminder();
+	bitsWriter.WriteEndOfFile(8);
 }
 
 TEST(BitsReaderTest, ShouldReadSeveralCodesWithDiffCodeSize)
 {
-	FILE* inputFile = fopen("Tests/test3", "rb");
+	FILE* inputFile = fopen("Results/test3", "rb");
 	BitsReader bitsReader(inputFile);
 	int code1 = bitsReader.ReadNextBits();
 	int code2 = bitsReader.ReadNextBits();
@@ -69,14 +78,14 @@ TEST(BitsReaderTest, ShouldReadSeveralCodesWithDiffCodeSize)
 
 TEST(BitsWriterTest, ShouldNotWriteEmptyReminder)
 {
-	FILE* outputFile = fopen("Tests/test", "wb");
+	FILE* outputFile = fopen("Results/test", "wb");
 	BitsWriter bitsWriter(outputFile);
-	bitsWriter.WriteReminder();
+	bitsWriter.WriteEndOfFile(2);
 }
 
 TEST(BitsWriterTest, ShouldReadEmptyFile)
 {
-	FILE* inputFile = fopen("Tests/test", "rb");
+	FILE* inputFile = fopen("Results/test", "rb");
 	BitsReader bitsReader(inputFile);
 	int code = bitsReader.ReadNextBits();
 

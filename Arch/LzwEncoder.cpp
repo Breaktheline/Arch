@@ -4,6 +4,7 @@ LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 {
 	_inputFile = inputFile;
 	_bitsWriter = new BitsWriter(outputFile);
+	_inputFileSize = 0;
 }
 
 LzwEncoder::~LzwEncoder()
@@ -36,11 +37,20 @@ void LzwEncoder::Encode()
 		}
 	}
 
-	_bitsWriter->WriteReminder();
+	_bitsWriter->WriteEndOfFile(_inputFileSize);
 }
 
 int LzwEncoder::ReadNextByte()
 {
+	if (_inputFileSize < MAX_FILE_SIZE)
+	{
+		_inputFileSize++;
+	}
+	else
+	{
+		_inputFileSize = 1;
+	}
+
 	return fgetc(_inputFile);
 }
 
@@ -62,3 +72,4 @@ void LzwEncoder::AddNewNode(byte symbol, unsigned int hashCode)
 	_bitsWriter->AddBitsToBuffer(_parent);
 	_parent = symbol;
 }
+

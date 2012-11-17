@@ -7,9 +7,17 @@
 class BitsWriter: BinaryFileOperations
 {
 public:
-	BitsWriter(FILE* outputFile): BinaryFileOperations(outputFile) {};
+	BitsWriter(FILE* outputFile);
+
 	void AddBitsToBuffer(int bits);
-	void WriteReminder();
+	void WriteEndOfFile(unsigned long uncompSize);
+
+private:
+	void WriteByte();
+	void UpdateCrc();
+
+	byte _crcBuffer[CRC_BUFFER_SIZE];
+	int _crcBufferSize;
 };
 
 #endif

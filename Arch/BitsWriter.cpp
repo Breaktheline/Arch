@@ -1,5 +1,11 @@
 #include "BitsWriter.h"
 
+BitsWriter::BitsWriter(FILE* outputFile) : BinaryFileOperations(outputFile)
+{
+	_crcBufferSize = 0;
+	_crc = 0L;
+}
+
 void BitsWriter::AddBitsToBuffer(int code)
 {
 	//Добавляем по одному биту и записываем в файл, когда наполнится байт.
@@ -14,9 +20,11 @@ void BitsWriter::AddBitsToBuffer(int code)
 		//если буфер заполнет, то пишем в файл.
 		if (_bufferSize == 8)
 		{
-			fputc(_buffer, _file);
-			_bufferSize = 0;
-			_buffer = 0;
+			WriteByte();
+			if (_crcBufferSize == CRC_BUFFER_SIZE)
+			{
+				UpdateCrc();
+			}
 		}
 	}
 
@@ -24,11 +32,31 @@ void BitsWriter::AddBitsToBuffer(int code)
 	ChangeCodeLength(code);
 }
 
-void BitsWriter::WriteReminder()
+void BitsWriter::WriteByte() 
+{
+	fputc(_buffer, _file);
+	_crcBuffer[_crcBufferSize] = _buffer;
+	_crcBufferSize++;
+
+	_bufferSize = 0;
+	_buffer = 0;
+}
+
+void BitsWriter::WriteEndOfFile(unsigned long uncompSize)
 {
 	if (_bufferSize > 0)
 	{
-		fputc(_buffer, _file);
+		WriteByte();
+		UpdateCrc();
 	}
+
+	fwrite(&_crc, CRC_SIZE_BYTES, 1, _file);
+	fwrite(&uncompSize, FILE_SIZE_BYTES, 1, _file);
+}
+
+void BitsWriter::UpdateCrc()
+{
+	_crc = _crcMaker.UpdateCrc(_crc, _crcBuffer, _crcBufferSize);
+	_crcBufferSize = 0;
 }
 

@@ -16,11 +16,13 @@ public:
 private:
 	int ReadNextByte();
 	void AddNewNode(byte symbol, unsigned int hashCode);
+	unsigned long GetInputFileSize();
 
 	FILE* _inputFile;
 	BitsWriter* _bitsWriter;
 	HashTree _hashTree;
 	unsigned int _parent;
+	unsigned long _inputFileSize;
 };
 
 #endif

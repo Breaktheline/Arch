@@ -22,22 +22,7 @@ CrcMaker::CrcMaker()
 	}
 }
 
-unsigned long CrcMaker::MakeCrc(char* fileName)
-{
-	FILE* file = fopen(fileName, "rb");
-	if (file == NULL)
-	{
-		throw FileException(ErrorMessages::FILE_OPEN_ERROR, fileName);
-	}
 
-	int nextByte;
-	unsigned long crc = 0L;
-	byte buffer[BUFFER_SIZE];
-	while(int bufferLength = (fread(&buffer, sizeof(byte), BUFFER_SIZE, file)) > 0)
-	{
-		UpdateCrc(crc, buffer, bufferLength);
-	}
-}
 
 unsigned long CrcMaker::UpdateCrc(unsigned long crc, unsigned char *buf, int len)
 {
@@ -49,15 +34,4 @@ unsigned long CrcMaker::UpdateCrc(unsigned long crc, unsigned char *buf, int len
 	}
 
 	return c ^ 0xffffffffL;
-}
-
-void CrcMaker::WriteCrcToFile(char* fileName)
-{
-	//TODO: записать в файл CRC32
-}
-
-unsigned long CrcMaker::ReadCrcFromFile(char* fileName)
-{
-	//TODO: вытащить из файла CRC32
-	return 0;
 }

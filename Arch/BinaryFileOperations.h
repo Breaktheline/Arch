@@ -2,13 +2,13 @@
 #define H_BINARY_FILE_OPERATIONS
 
 #include "Common.h"
+#include "CrcMaker.h"
 
 class BinaryFileOperations
 {
 public:
 	BinaryFileOperations(FILE* file);
 	~BinaryFileOperations();
-
 protected:
 	void ChangeCodeLength(int nodeIndex);
 
@@ -17,6 +17,9 @@ protected:
 	int _bufferSize;
 	int _bitsInCode;
 	int _codeSize;
+
+	CrcMaker _crcMaker;
+	unsigned long _crc;
 };
 
 #endif

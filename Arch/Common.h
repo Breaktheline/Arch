@@ -5,6 +5,10 @@ typedef unsigned char byte;
 #define MIN_CODE_LEN 9
 #define MAX_CODE_LEN 15
 #define NIL -1
+#define MAX_FILE_SIZE 4294967295
+#define CRC_SIZE_BYTES 4
+#define FILE_SIZE_BYTES 4
+#define CRC_BUFFER_SIZE 1024
 
 #include <stdlib.h>
 #include <stdio.h>
