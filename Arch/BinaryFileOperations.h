@@ -18,8 +18,7 @@ protected:
 	int _bitsInCode;
 	int _codeSize;
 
-	CrcMaker _crcMaker;
-	unsigned long _crc;
+
 };
 
 #endif

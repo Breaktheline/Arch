@@ -87,6 +87,7 @@
     <ClCompile Include="Common.cpp" />
     <ClCompile Include="ArchTests.cpp" />
     <ClCompile Include="CrcMaker.cpp" />
+    <ClCompile Include="ExecutorTests.cpp" />
     <ClCompile Include="HashTreeTests.cpp" />
     <ClCompile Include="HashTree.cpp" />
     <ClCompile Include="LzwDecoder.cpp" />

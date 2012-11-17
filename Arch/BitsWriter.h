@@ -18,6 +18,8 @@ private:
 
 	byte _crcBuffer[CRC_BUFFER_SIZE];
 	int _crcBufferSize;
+	CrcMaker _crcMaker;
+	unsigned long _crc;
 };
 
 #endif
