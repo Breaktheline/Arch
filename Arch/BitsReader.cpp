@@ -37,6 +37,8 @@ unsigned long BitsReader::MakeCrc()
 	unsigned long crc = 0L;
 	byte buffer[CRC_BUFFER_SIZE];
 	int bufferLength;
+
+	SetFileToStart();
 	while((bufferLength = ReadToBuffer(buffer)) > 0)
 	{
 		//TODO: если длина файла больше long, то нужна друга€ проверка.
@@ -81,5 +83,10 @@ void BitsReader::ReadFileInfo()
 bool BitsReader::CanReadFile()
 {
 	return ftell(_file) <= _lastFilePosition - CRC_SIZE_BYTES - FILE_SIZE_BYTES;
+}
+
+unsigned long BitsReader::GetUncompressedSize()
+{
+	return _uncompressedFileSize;
 }
 

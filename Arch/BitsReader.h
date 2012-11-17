@@ -9,15 +9,13 @@ class BitsReader: BinaryFileOperations
 public:
 	BitsReader(FILE* inputFile);
 	int ReadNextBits();
-
-	bool CanReadFile();
-
+	unsigned long GetUncompressedSize();
 	bool CheckCrc();
 
 private:
 	void ReadFileInfo();
 	unsigned long MakeCrc();
-
+	bool CanReadFile();
 	unsigned int ReadToBuffer(byte* buffer);
 	void SetFileToStart();
 	void ReadUncompFileSize();

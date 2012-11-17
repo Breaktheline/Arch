@@ -15,16 +15,12 @@ TEST(BitsReaderTest, ShouldReadCode)
 	FILE* inputFile = fopen("Results/test1", "rb");
 	BitsReader bitsReader(inputFile);
 	int code = bitsReader.ReadNextBits();
-	ASSERT_EQ(153, code);
-}
-
-TEST(BitsReaderTest, ShouldReadCrc)
-{
-	FILE* inputFile = fopen("Results/test1", "rb");
-	BitsReader bitsReader(inputFile);
 	bool check = bitsReader.CheckCrc();
+	unsigned long size = bitsReader.GetUncompressedSize();
 
 	ASSERT_TRUE(check);
+	ASSERT_EQ(153, code);
+	ASSERT_EQ(1, size);
 }
 
 TEST(BitsWriterTest, ShouldWriteSeveralBytes)
@@ -44,10 +40,15 @@ TEST(BitsReaderTest, ShouldReadSeveralCodes)
 	int code1 = bitsReader.ReadNextBits();
 	int code2 = bitsReader.ReadNextBits();
 	int code3 = bitsReader.ReadNextBits();
+	bool check = bitsReader.CheckCrc();
+	unsigned long size = bitsReader.GetUncompressedSize();
+
+	ASSERT_TRUE(check);
 
 	ASSERT_EQ(153, code1);
 	ASSERT_EQ(90, code2);
 	ASSERT_EQ(222, code3);
+	ASSERT_EQ(3, size);
 }
 
 TEST(BitsWriterTest, ShouldChangeCodeSize)
@@ -69,11 +70,16 @@ TEST(BitsReaderTest, ShouldReadSeveralCodesWithDiffCodeSize)
 	int code2 = bitsReader.ReadNextBits();
 	int code3 = bitsReader.ReadNextBits();
 	int code4 = bitsReader.ReadNextBits();
+	bool check = bitsReader.CheckCrc();
+	unsigned long size = bitsReader.GetUncompressedSize();
+
+	ASSERT_TRUE(check);
 
 	ASSERT_EQ(153, code1);
 	ASSERT_EQ(390, code2);
 	ASSERT_EQ(522, code3);
 	ASSERT_EQ(1222, code4);
+	ASSERT_EQ(8, size);
 }
 
 TEST(BitsWriterTest, ShouldNotWriteEmptyReminder)
@@ -88,6 +94,11 @@ TEST(BitsWriterTest, ShouldReadEmptyFile)
 	FILE* inputFile = fopen("Results/test", "rb");
 	BitsReader bitsReader(inputFile);
 	int code = bitsReader.ReadNextBits();
+	bool check = bitsReader.CheckCrc();
+	unsigned long size = bitsReader.GetUncompressedSize();
+
+	ASSERT_TRUE(check);
 
 	ASSERT_EQ(NIL, code);
+	ASSERT_EQ(2, size);
 }
