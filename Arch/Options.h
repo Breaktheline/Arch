@@ -33,6 +33,8 @@ struct Options
 	bool Stdin;
 
 	TList<char*>* Files;
+	TList<char*>* Dirs;
+	
 };
 
 #endif

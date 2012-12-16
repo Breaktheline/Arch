@@ -103,6 +103,7 @@
     <ClInclude Include="BitsWriter.h" />
     <ClInclude Include="Common.h" />
     <ClInclude Include="CrcMaker.h" />
+    <ClInclude Include="dirent.h" />
     <ClInclude Include="HashTree.h" />
     <ClInclude Include="LzwDecoder.h" />
     <ClInclude Include="LzwEncoder.h" />

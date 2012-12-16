@@ -9,10 +9,14 @@ typedef unsigned char byte;
 #define CRC_SIZE_BYTES 4
 #define FILE_SIZE_BYTES 4
 #define CRC_BUFFER_SIZE 1024
+#define ID1 31
+#define ID2 139
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
+#include "dirent.h"
 #include "TList.h"
 
 struct ErrorMessages

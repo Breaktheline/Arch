@@ -38,7 +38,14 @@ Options* Parser::Parse(int argc, char** argv)
 	//количество указанных файлов.
 	for (int i = optionsCount + 1; i < argc; i++)
 	{
-		options->Files->Add(argv[i]);
+		if (options->Recursive)
+		{
+			options->Dirs->Add(argv[i]);
+		}
+		else
+		{
+			options->Files->Add(argv[i]);
+		}
 	}
 
 	return options;

@@ -14,6 +14,8 @@ LzwDecoder::~LzwDecoder()
 
 void LzwDecoder::Decode()
 {
+	_bitsReader->SetStart();
+
 	int code = _bitsReader->ReadNextBits();
 	
 	if (code != NIL)

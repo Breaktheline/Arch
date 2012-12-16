@@ -2,9 +2,45 @@
 
 void ArchExecutor::Execute(Options* options)
 {
+	if (options->Recursive)
+	{
+		int dirCount = options->Files->GetCount();
+
+		for (int i = 0; i < dirCount; i++)
+		{
+			DIR *dir;
+			struct dirent *ent;
+			dir = opendir (options->Files->GetElement(i));
+			
+			if (dir != NULL) 
+			{
+				/* print all the files and directories within directory */
+				while ((ent = readdir (dir)) != NULL) 
+				{
+					options->Files->Add(ent->d_name);
+				}
+				closedir (dir);
+			} 
+			else 
+			{
+				/* could not open directory */
+				perror ("");
+			}
+		}
+	}
+
 	if (options->Test)
 	{
 		CheckFileIntagrity(options);
+
+		return;
+	}
+
+	if (options->List)
+	{
+		ListCompressionInfo(options);
+
+		return;
 	}
 }
 
@@ -52,7 +88,7 @@ unsigned int ArchExecutor::ReadToBuffer( byte* buffer, FILE* file )
 	return fread(buffer, sizeof(byte), CRC_BUFFER_SIZE, file);
 }
 
-unsigned long ArchExecutor::ReadUncompressedSize( FILE* file )
+unsigned long ArchExecutor::ReadUncompressedSize(FILE* file)
 {
 	fseek(file, -FILE_SIZE_BYTES, SEEK_END);
 	unsigned long size;
@@ -82,4 +118,51 @@ void ArchExecutor::CheckFileIntagrity(Options* options)
 		}
 		fclose(file);
 	}
+}
+
+void ArchExecutor::ListCompressionInfo(Options* options)
+{
+	int filesCount = options->Files->GetCount();
+	for(int i = 0; i < filesCount; i++)
+	{
+		FILE* file = fopen(options->Files->GetElement(i), "rb");
+		OutputCompressInfo(file);
+		fclose(file);
+	}
+}
+
+void ArchExecutor::OutputCompressInfo(FILE* file)
+{
+	char* filename = ReadFileName(file);
+	unsigned long fileSize = ReadUncompressedSize(file);
+	unsigned long conpressedFileSize = GetLastFilePosition(file);
+	printf("compressed size: %lu\t uncompressed size: %lu\n", conpressedFileSize, fileSize);
+	printf("ratio: %f%%\t uncompressed_name: ", conpressedFileSize/fileSize);
+	int i = 0;
+	while (filename[i]!= '\0')
+	{
+		printf("%c", filename[i]);
+		i++;
+	}
+
+	printf("\n");
+}
+
+char* ArchExecutor::ReadFileName(FILE* file)
+{
+	fseek(file, 2, SEEK_SET);
+	char b;
+	int i = 0;
+	char* filename = new char[FILENAME_MAX];
+	while ((b = fgetc(file)) != '\0')
+	{
+		filename[i] = b;
+		i++;
+	}
+
+	//fread(filename, sizeof(char), 4, file);
+
+	filename[i] = '\0';
+
+	return filename;
 }

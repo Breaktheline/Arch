@@ -11,6 +11,7 @@ public:
 
 	void AddBitsToBuffer(int bits);
 	void WriteEndOfFile(unsigned long uncompSize);
+	void WriteBeginOfFile(char* inputFileName);
 
 private:
 	void WriteByte();
