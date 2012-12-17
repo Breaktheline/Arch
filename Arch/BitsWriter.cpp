@@ -60,3 +60,12 @@ void BitsWriter::UpdateCrc()
 	_crcBufferSize = 0;
 }
 
+void BitsWriter::WriteBeginOfFile()
+{
+	byte id1 = ID1;
+	byte id2 = ID2;
+	_buffer = id1;
+	WriteByte();
+	_buffer = id2;
+	WriteByte();
+}

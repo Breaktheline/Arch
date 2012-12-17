@@ -15,6 +15,7 @@ LzwEncoder::~LzwEncoder()
 
 void LzwEncoder::Encode()
 {
+	_bitsWriter->WriteBeginOfFile();
 	_parent = ReadNextByte();
 
 	if (feof(_inputFile))

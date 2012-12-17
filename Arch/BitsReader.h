@@ -9,6 +9,7 @@ class BitsReader: BinaryFileOperations
 public:
 	BitsReader(FILE* inputFile);
 	int ReadNextBits();
+	void SetStart();
 
 private:
 	bool CanReadFile();
