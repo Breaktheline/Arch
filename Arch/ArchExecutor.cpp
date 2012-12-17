@@ -18,12 +18,12 @@ void ArchExecutor::Execute(Options* options)
 	if (options->Test)
 	{
 		CheckFileIntagrity(options);
+		return;
 	}
 
 	if (options->List)
 	{
 		ListCompressionInfo(options);
-
 		return;
 	}
 
@@ -50,7 +50,6 @@ void ArchExecutor::Execute(Options* options)
 			FILE* inputFile = fopen(path, "rb");
 			FILE* outputFile = fopen(compressedPath, "wb");
 			LzwEncoder encoder(inputFile, outputFile);
-			encoder.WriteStartInfo(fileName);
 			encoder.Encode();
 		}
 	}
@@ -103,6 +102,10 @@ unsigned int ArchExecutor::ReadToBuffer( byte* buffer, FILE* file )
 unsigned long ArchExecutor::ReadUncompressedSize(FILE* file)
 {
 	fseek(file, -FILE_SIZE_BYTES, SEEK_END);
+	if (file < 0)
+	{
+		return 0;
+	}
 	unsigned long size;
 	fread(&size, FILE_SIZE_BYTES, 1, file);
 	rewind(file);
@@ -145,38 +148,11 @@ void ArchExecutor::ListCompressionInfo(Options* options)
 
 void ArchExecutor::OutputCompressInfo(FILE* file)
 {
-	char* filename = ReadFileName(file);
 	unsigned long fileSize = ReadUncompressedSize(file);
-	unsigned long conpressedFileSize = GetLastFilePosition(file);
-	printf("compressed size: %lu\t uncompressed size: %lu\n", conpressedFileSize, fileSize);
-	printf("ratio: %f%%\t uncompressed_name: ", conpressedFileSize/fileSize);
-	int i = 0;
-	while (filename[i]!= '\0')
-	{
-		printf("%c", filename[i]);
-		i++;
-	}
-
-	printf("\n");
-}
-
-char* ArchExecutor::ReadFileName(FILE* file)
-{
-	fseek(file, 2, SEEK_SET);
-	char b;
-	int i = 0;
-	char* filename = new char[FILENAME_MAX];
-	while ((b = fgetc(file)) != '\0')
-	{
-		filename[i] = b;
-		i++;
-	}
-
-	//fread(filename, sizeof(char), 4, file);
-
-	filename[i] = '\0';
-
-	return filename;
+	unsigned long compressedFileSize = GetLastFilePosition(file);
+	printf("compressed size: %lu\n", compressedFileSize);
+	printf("uncompressed size: %lu\n", fileSize);
+	printf("ratio: %f%%\n", (double)compressedFileSize/fileSize);
 }
 
 void ArchExecutor::FillFilesFromDir(TList<char*>* files, const char* dirName)

@@ -13,14 +13,14 @@ LzwEncoder::~LzwEncoder()
 	delete _bitsWriter;
 }
 
-void LzwEncoder::WriteStartInfo(char* fileName)
-{
-	_bitsWriter->WriteBeginOfFile(fileName);
-}
-
 void LzwEncoder::Encode()
 {
 	_parent = ReadNextByte();
+
+	if (feof(_inputFile))
+	{
+		return;
+	}
 
 	while (!feof(_inputFile))
 	{
@@ -42,7 +42,7 @@ void LzwEncoder::Encode()
 		}
 	}
 
-	_bitsWriter->WriteEndOfFile(_inputFileSize);
+	_bitsWriter->WriteEndOfFile(_inputFileSize-1);
 }
 
 int LzwEncoder::ReadNextByte()

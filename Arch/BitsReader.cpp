@@ -37,13 +37,3 @@ bool BitsReader::CanReadFile()
 {
 	return ftell(_file) <= _lastFilePosition - CRC_SIZE_BYTES - FILE_SIZE_BYTES;
 }
-
-void BitsReader::SetStart()
-{
-	char b;
-	int i = 0;
-	while ((b = fgetc(_file)) != '\0')
-	{
-		i++;
-	}
-}

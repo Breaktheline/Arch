@@ -11,7 +11,6 @@ class LzwEncoder
 public:
 	LzwEncoder(FILE* inputFile, FILE* outputFile);
 	~LzwEncoder();
-	void WriteStartInfo(char* fileName);
 	void Encode();
 
 private:
