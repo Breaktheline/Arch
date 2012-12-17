@@ -23,36 +23,25 @@ void ArchExecutor::Execute(Options* options)
 
 	if (options->List)
 	{
+		CheckFileIntagrity(options);
 		ListCompressionInfo(options);
 		return;
 	}
 
 	if (options->Code)
 	{
-		int filesCount = options->Files->GetCount();
-		for(int i = 0; i < filesCount; i++)
-		{
-			char* path = options->Files->GetElement(i);
-			char* compressedPath = new char[PATH_MAX];
-			int pathLength = sprintf (compressedPath, "%s.ar", path);
-			if (pathLength >= PATH_MAX) 
-			{
-				printf ("Path length has got too long.\n");
-				continue;
-			}
-
-			char* fileName = GetName(path);
-			if (IsCompressedFile(fileName))
-			{
-				continue;
-			}
-
-			FILE* inputFile = fopen(path, "rb");
-			FILE* outputFile = fopen(compressedPath, "wb");
-			LzwEncoder encoder(inputFile, outputFile);
-			encoder.Encode();
-		}
+		EncodeFilesToStdout(options);
+		return;
 	}
+
+	if (options->Decode)
+	{
+		CheckFileIntagrity(options);
+		DecodeFiles(options);
+		return;
+	}
+
+	EncodeFiles(options);
 }
 
 unsigned long ArchExecutor::ReadCrcFromFile(FILE* file)
@@ -89,7 +78,7 @@ unsigned long ArchExecutor::MakeCrc(FILE* file)
 	return crc;
 }
 
-bool ArchExecutor::CheckCrc( FILE* file )
+bool ArchExecutor::CheckCrc(FILE* file)
 {
 	return ReadCrcFromFile(file) == MakeCrc(file);
 }
@@ -126,10 +115,11 @@ void ArchExecutor::CheckFileIntagrity(Options* options)
 	int filesCount = options->Files->GetCount();
 	for(int i = 0; i < filesCount; i++)
 	{
-		FILE* file = fopen(options->Files->GetElement(i), "rb");
-		if (!CheckCrc(file))
+		char* path = options->Files->GetElement(i);
+		FILE* file = fopen(path, "rb");
+		if (IsCompressedFile(file) && !CheckCrc(file))
 		{
-			printf("invalid compressed data--crc error\n");
+			printf("arch: %s: invalid compressed data--crc error\n", GetName(path));
 		}
 		fclose(file);
 	}
@@ -138,21 +128,41 @@ void ArchExecutor::CheckFileIntagrity(Options* options)
 void ArchExecutor::ListCompressionInfo(Options* options)
 {
 	int filesCount = options->Files->GetCount();
+	printf("compressed\t uncompressed: \t ratio\t  uncompressed_name\n");
 	for(int i = 0; i < filesCount; i++)
 	{
 		FILE* file = fopen(options->Files->GetElement(i), "rb");
-		OutputCompressInfo(file);
+		char* filename = ReadFileName(file);
+		unsigned long fileSize = ReadUncompressedSize(file);
+		unsigned long compressedFileSize = GetLastFilePosition(file);
+		printf("%lu\t\t %lu\t\t %f\t\t", compressedFileSize, fileSize, (double)fileSize/compressedFileSize);
+		int j = 0;
+		while (filename[j]!= '\0')
+		{
+			printf("%c", filename[j]);
+			j++;
+		}
+
+		printf("\n");
 		fclose(file);
 	}
 }
 
-void ArchExecutor::OutputCompressInfo(FILE* file)
+char* ArchExecutor::ReadFileName(FILE* file)
 {
-	unsigned long fileSize = ReadUncompressedSize(file);
-	unsigned long compressedFileSize = GetLastFilePosition(file);
-	printf("compressed size: %lu\n", compressedFileSize);
-	printf("uncompressed size: %lu\n", fileSize);
-	printf("ratio: %f%%\n", (double)compressedFileSize/fileSize);
+	fseek(file, 2, SEEK_SET);
+	char b;
+	int i = 0;
+	char* filename = new char[FILENAME_MAX];
+	while ((b = fgetc(file)) != '\0')
+	{
+		filename[i] = b;
+		i++;
+	}
+	
+	filename[i] = '\0';
+	rewind(file);
+	return filename;
 }
 
 void ArchExecutor::FillFilesFromDir(TList<char*>* files, const char* dirName)
@@ -220,13 +230,94 @@ char* ArchExecutor::GetName(char* path)
 	return fileName == NULL ? path : fileName + 1;
 }
 
-bool ArchExecutor::IsCompressedFile(char* fileName)
+bool ArchExecutor::IsCompressedFile(FILE* file)
 {
-	char* extention = strrchr(fileName, '.');
-	if (extention == NULL)
-	{
-		return false;
-	}
+	byte indexes[2];
+	fread(&indexes, 2, 1, file);
+	rewind(file);
 
-	return strcmp(extention, ".ar") == 0;
+	return indexes[0] == ID1 && indexes[1] == ID2;
+}
+
+void ArchExecutor::EncodeFiles(Options* options)
+{
+	int filesCount = options->Files->GetCount();
+	for(int i = 0; i < filesCount; i++)
+	{
+		char* path = options->Files->GetElement(i);
+
+		FILE* inputFile = fopen(path, "rb");
+		if (IsCompressedFile(inputFile))
+		{
+			fclose(inputFile);
+			continue;
+		}
+
+		char* compressedPath = new char[PATH_MAX];
+		int pathLength = sprintf (compressedPath, "%s.ar", path);
+		if (pathLength >= PATH_MAX) 
+		{
+			printf ("Path length has got too long.\n");
+			continue;
+		}
+
+		FILE* outputFile = fopen(compressedPath, "wb");
+
+		LzwEncoder encoder(inputFile, outputFile);
+		encoder.Encode(GetName(path));
+		fclose(inputFile);
+		remove(path);
+	}
+}
+
+void ArchExecutor::EncodeFilesToStdout( Options* options )
+{
+	int filesCount = options->Files->GetCount();
+	for(int i = 0; i < filesCount; i++)
+	{
+		char* path = options->Files->GetElement(i);
+		FILE* inputFile = fopen(path, "rb");
+		if (IsCompressedFile(inputFile))
+		{
+			fclose(inputFile);
+			continue;
+		}
+		LzwEncoder encoder(inputFile, stdout);
+		encoder.Encode(GetName(path));
+		fclose(inputFile);
+	}
+}
+
+void ArchExecutor::DecodeFiles(Options* options)
+{
+	int filesCount = options->Files->GetCount();
+	for(int i = 0; i < filesCount; i++)
+	{
+		char* path = options->Files->GetElement(i);
+		FILE* inputFile = fopen(path, "rb");
+		char* fileName = ReadFileName(inputFile);
+		char filePath[PATH_MAX];
+		strcpy(filePath, path);
+		char* inputFileName = GetName(path);
+		filePath[strlen(path) - strlen(inputFileName) - 1] = '\0';
+		char decompressedPath[PATH_MAX];
+		int pathLength = sprintf (decompressedPath, "%s/%s", filePath, fileName);
+		if (pathLength >= PATH_MAX) 
+		{
+			printf ("Path length has got too long.\n");
+			continue;
+		}
+		
+		FILE* outputFile = fopen(decompressedPath, "wb");
+		if (!IsCompressedFile(inputFile))
+		{
+			fclose(inputFile);
+			continue;
+		}
+
+		LzwDecoder decoder(inputFile, outputFile);
+		decoder.Decode();
+		fclose(inputFile);
+		remove(path);
+	}
 }

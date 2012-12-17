@@ -7,7 +7,7 @@ TEST(EncoderTest, ShouldEncodeFileWithoutRepetition)
 	FILE* inputFile = fopen("Tests/ToEncode/in1", "rb");
 	FILE* outputFile = fopen("Tests/ToDecode/out1.ar", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
-	encoder.Encode();
+	encoder.Encode("in1");
 }
 
 TEST(DecoderTest, ShouldDecodeFileWithoutRepetition)
@@ -23,7 +23,7 @@ TEST(EncoderTest, ShouldEncodeFileWithRepetition)
 	FILE* inputFile = fopen("Tests/ToEncode/in2", "rb");
 	FILE* outputFile = fopen("Tests/ToDecode/out2.ar", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
-	encoder.Encode();
+	encoder.Encode("in2");
 }
 
 TEST(DecoderTest, ShouldDecodeFileWithRepetition)
@@ -39,7 +39,7 @@ TEST(EncoderTest, ShouldEncodeFileWithoutPath)
 	FILE* inputFile = fopen("in2", "rb");
 	FILE* outputFile = fopen("out2", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
-	encoder.Encode();
+	encoder.Encode("in2");
 }
 
 TEST(EncoderTest, ShouldEncodeEmptyFiles)
@@ -47,7 +47,7 @@ TEST(EncoderTest, ShouldEncodeEmptyFiles)
 	FILE* inputFile = fopen("Tests/ToEncode/in3", "rb");
 	FILE* outputFile = fopen("Tests/ToDecode/out3.ar", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
-	encoder.Encode();
+	encoder.Encode("in3");
 }
 
 TEST(DecoderTest, ShouldDecodeEmptyFiles)
@@ -63,7 +63,7 @@ TEST(EncoderTest, ShouldEncodeCaseWhenDecoderDoesntKnowCode)
 	FILE* inputFile = fopen("Tests/ToEncode/in4", "rb");
 	FILE* outputFile = fopen("Tests/ToDecode/out4.ar", "wb");
 	LzwEncoder encoder(inputFile, outputFile);
-	encoder.Encode();
+	encoder.Encode("in4");
 }
 
 TEST(DecoderTest, ShouldDecodeCaseWhenDecoderDoesntKnowCode)

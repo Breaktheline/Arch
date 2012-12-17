@@ -12,6 +12,9 @@ public:
 private:
 	void CheckFileIntagrity(Options* options);
 	bool CheckCrc(FILE* file);
+	void EncodeFiles(Options* options);
+	void EncodeFilesToStdout(Options* options);
+
 	unsigned long ReadCrcFromFile(FILE* file);
 	unsigned long ReadUncompressedSize(FILE* file);
 	unsigned long MakeCrc(FILE* file);
@@ -25,7 +28,10 @@ private:
 	char* ReadFileName(FILE* file);
 	void FillFilesFromDir (TList<char*>* files, const char* dirNAme);
 	char* GetName(char* path);
-	bool IsCompressedFile( char* fileName );
+	bool IsCompressedFile(FILE* file);
+	char* GetNameForDecompressedFile(char* path);
+	void DecodeFiles(Options* options);
+	char* GetFilePath( char* path );
 	CrcMaker _crcMaker;
 	unsigned long _uncompressedFileSize;
 };

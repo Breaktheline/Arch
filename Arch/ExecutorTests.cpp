@@ -56,8 +56,7 @@ TEST(ExecutorTest, ShouldRecursiveCompressDir)
 {
 	Options* options = new Options();
 	options->Recursive = true;
-	options->Code = true;
-	options->Dirs->Add("Tests/ToDecode");
+	options->Dirs->Add("Tests/Dir");
 
 	ArchExecutor executor;
 	executor.Execute(options);
@@ -68,7 +67,18 @@ TEST(ExecutorTest, ShouldRecursiveListCompressedDir)
 	Options* options = new Options();
 	options->Recursive = true;
 	options->List = true;
-	options->Dirs->Add("Tests/ToDecode");
+	options->Dirs->Add("Tests/Dir");
+
+	ArchExecutor executor;
+	executor.Execute(options);
+}
+
+TEST(ExecutorTest, ShouldRecursiveDecompressDir)
+{
+	Options* options = new Options();
+	options->Recursive = true;
+	options->Decode = true;
+	options->Dirs->Add("Tests/Dir");
 
 	ArchExecutor executor;
 	executor.Execute(options);

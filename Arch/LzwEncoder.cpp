@@ -9,19 +9,13 @@ LzwEncoder::LzwEncoder(FILE* inputFile, FILE* outputFile)
 
 LzwEncoder::~LzwEncoder()
 {
-	fclose(_inputFile);
 	delete _bitsWriter;
 }
 
-void LzwEncoder::Encode()
+void LzwEncoder::Encode(char* fileName)
 {
-	_bitsWriter->WriteBeginOfFile();
+	_bitsWriter->WriteBeginOfFile(fileName);
 	_parent = ReadNextByte();
-
-	if (feof(_inputFile))
-	{
-		return;
-	}
 
 	while (!feof(_inputFile))
 	{

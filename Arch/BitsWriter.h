@@ -10,7 +10,7 @@ public:
 	BitsWriter(FILE* outputFile);
 
 	void AddBitsToBuffer(int bits);
-	void WriteBeginOfFile();
+	void WriteBeginOfFile(char* fileName);
 	void WriteEndOfFile(unsigned long uncompSize);
 
 private:
