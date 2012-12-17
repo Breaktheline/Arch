@@ -242,6 +242,13 @@ bool ArchExecutor::IsCompressedFile(FILE* file)
 void ArchExecutor::EncodeFiles(Options* options)
 {
 	int filesCount = options->Files->GetCount();
+	if (options->Stdin || filesCount == 0)
+	{
+		LzwEncoder encoder(stdin, stdout);
+		encoder.Encode("");
+		return;
+	}
+
 	for(int i = 0; i < filesCount; i++)
 	{
 		char* path = options->Files->GetElement(i);
@@ -270,12 +277,20 @@ void ArchExecutor::EncodeFiles(Options* options)
 	}
 }
 
-void ArchExecutor::EncodeFilesToStdout( Options* options )
+void ArchExecutor::EncodeFilesToStdout(Options* options)
 {
 	int filesCount = options->Files->GetCount();
+	if (options->Stdin || filesCount == 0)
+	{
+		LzwEncoder encoder(stdin, stdout);
+		encoder.Encode("");
+		return;
+	}
+	
 	for(int i = 0; i < filesCount; i++)
 	{
 		char* path = options->Files->GetElement(i);
+
 		FILE* inputFile = fopen(path, "rb");
 		if (IsCompressedFile(inputFile))
 		{
