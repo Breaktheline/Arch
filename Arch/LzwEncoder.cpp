@@ -13,11 +13,8 @@ LzwEncoder::~LzwEncoder()
 	delete _bitsWriter;
 }
 
-void LzwEncoder::WriteStartInfo(char* filePath)
+void LzwEncoder::WriteStartInfo(char* fileName)
 {
-	char* fileName = strrchr(filePath,'/');
-	fileName = fileName == NULL ? filePath : fileName + 1;
-
 	_bitsWriter->WriteBeginOfFile(fileName);
 }
 

@@ -16,6 +16,7 @@ struct Options
 		Best = false;
 		Stdin = false;
 		Files = new TList<char*>();
+		Dirs = new TList<char*>();
 	}
 
 	~Options()

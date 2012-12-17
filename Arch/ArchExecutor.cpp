@@ -1,39 +1,23 @@
 #include "ArchExecutor.h"
+#include <limits.h>
+#include "LzwEncoder.h"
+#include "LzwDecoder.h"
 
 void ArchExecutor::Execute(Options* options)
 {
 	if (options->Recursive)
 	{
-		int dirCount = options->Files->GetCount();
+		int dirCount = options->Dirs->GetCount();
 
 		for (int i = 0; i < dirCount; i++)
 		{
-			DIR *dir;
-			struct dirent *ent;
-			dir = opendir (options->Files->GetElement(i));
-			
-			if (dir != NULL) 
-			{
-				/* print all the files and directories within directory */
-				while ((ent = readdir (dir)) != NULL) 
-				{
-					options->Files->Add(ent->d_name);
-				}
-				closedir (dir);
-			} 
-			else 
-			{
-				/* could not open directory */
-				perror ("");
-			}
+			FillFilesFromDir(options->Files, options->Dirs->GetElement(i));
 		}
 	}
 
 	if (options->Test)
 	{
 		CheckFileIntagrity(options);
-
-		return;
 	}
 
 	if (options->List)
@@ -41,6 +25,34 @@ void ArchExecutor::Execute(Options* options)
 		ListCompressionInfo(options);
 
 		return;
+	}
+
+	if (options->Code)
+	{
+		int filesCount = options->Files->GetCount();
+		for(int i = 0; i < filesCount; i++)
+		{
+			char* path = options->Files->GetElement(i);
+			char* compressedPath = new char[PATH_MAX];
+			int pathLength = sprintf (compressedPath, "%s.ar", path);
+			if (pathLength >= PATH_MAX) 
+			{
+				printf ("Path length has got too long.\n");
+				continue;
+			}
+
+			char* fileName = GetName(path);
+			if (IsCompressedFile(fileName))
+			{
+				continue;
+			}
+
+			FILE* inputFile = fopen(path, "rb");
+			FILE* outputFile = fopen(compressedPath, "wb");
+			LzwEncoder encoder(inputFile, outputFile);
+			encoder.WriteStartInfo(fileName);
+			encoder.Encode();
+		}
 	}
 }
 
@@ -165,4 +177,80 @@ char* ArchExecutor::ReadFileName(FILE* file)
 	filename[i] = '\0';
 
 	return filename;
+}
+
+void ArchExecutor::FillFilesFromDir(TList<char*>* files, const char* dirName)
+{
+    DIR* dir = opendir(dirName);
+
+    if (!dir) 
+	{
+        printf ("Cannot open directory '%s'\n", dirName);
+        return;
+    }
+
+    while (true) {
+        struct dirent * entry;
+        char* dName;
+		char* path = new char[PATH_MAX];
+
+        entry = readdir (dir);
+        if (! entry) 
+		{
+            break;
+        }
+
+		dName = entry->d_name;
+		int pathLength = sprintf (path, "%s/%s", dirName, dName);
+		if (pathLength >= PATH_MAX) 
+		{
+			printf ("Path length has got too long.\n");
+			continue;
+		}
+
+		// ѕровер€ем, €вл€етс€ ли директорией
+        if (entry->d_type & DT_DIR) 
+		{
+            // ѕровер€ем, что это не сама директори€ и не родительска€ директори€
+
+            if (strcmp (dName, "..") != 0 && strcmp (dName, ".") != 0) 
+			{
+                FillFilesFromDir(files, path);
+            }
+        }
+		else
+		{
+			files->Add(path);
+		}
+    }
+
+    if (closedir (dir)) 
+	{
+        printf ("Could not close '%s'\n", dirName);
+    }
+}
+
+char* ArchExecutor::GetName(char* path)
+{
+	char *fileName = NULL;
+
+	if (path == NULL)
+	{
+		return NULL;
+	}
+
+	fileName = strrchr(path, '/');
+
+	return fileName == NULL ? path : fileName + 1;
+}
+
+bool ArchExecutor::IsCompressedFile(char* fileName)
+{
+	char* extention = strrchr(fileName, '.');
+	if (extention == NULL)
+	{
+		return false;
+	}
+
+	return strcmp(extention, ".ar") == 0;
 }

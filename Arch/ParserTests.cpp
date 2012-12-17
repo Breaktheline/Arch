@@ -21,8 +21,8 @@ TEST(ParserTest, ShouldParseSeveralOptionsInOne)
 	ASSERT_TRUE(options->Code);
 	ASSERT_TRUE(options->Recursive);
 	ASSERT_TRUE(options->Best);
-	ASSERT_EQ(1, options->Files->GetCount());
-	ASSERT_EQ("file.txt", options->Files->GetElement(0));
+	ASSERT_EQ(1, options->Dirs->GetCount());
+	ASSERT_EQ("file.txt", options->Dirs->GetElement(0));
 }
 
 TEST(ParserTest, ShouldParseSeveralOptionsInDiff)
@@ -34,11 +34,11 @@ TEST(ParserTest, ShouldParseSeveralOptionsInDiff)
 	ASSERT_TRUE(options->Code);
 	ASSERT_TRUE(options->Recursive);
 	ASSERT_TRUE(options->Fast);
-	ASSERT_EQ(1, options->Files->GetCount());
-	ASSERT_EQ("file.txt", options->Files->GetElement(0));
+	ASSERT_EQ(1, options->Dirs->GetCount());
+	ASSERT_EQ("file.txt", options->Dirs->GetElement(0));
 }
 
-TEST(ParserTest, ShouldParseSeveralFiles)
+TEST(ParserTest, ShouldParseSeveralDirs)
 {
 	Parser parser;
 	char* argv[6] = {"arch", "-c", "-r", "file1.txt", "file2", "f3"};
@@ -46,6 +46,19 @@ TEST(ParserTest, ShouldParseSeveralFiles)
 
 	ASSERT_TRUE(options->Code);
 	ASSERT_TRUE(options->Recursive);
+	ASSERT_EQ(3, options->Dirs->GetCount());
+	ASSERT_EQ("file1.txt", options->Dirs->GetElement(0));
+	ASSERT_EQ("file2", options->Dirs->GetElement(1));
+	ASSERT_EQ("f3", options->Dirs->GetElement(2));
+}
+
+TEST(ParserTest, ShouldParseSeveralFiles)
+{
+	Parser parser;
+	char* argv[5] = {"arch", "-c", "file1.txt", "file2", "f3"};
+	Options* options = parser.Parse(5, argv);
+
+	ASSERT_TRUE(options->Code);
 	ASSERT_EQ(3, options->Files->GetCount());
 	ASSERT_EQ("file1.txt", options->Files->GetElement(0));
 	ASSERT_EQ("file2", options->Files->GetElement(1));

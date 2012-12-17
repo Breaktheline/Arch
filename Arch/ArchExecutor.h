@@ -9,11 +9,9 @@ class ArchExecutor
 public:
 	void Execute(Options* options);
 
-	void CheckFileIntagrity( Options* options );
-
-	bool CheckCrc(FILE* file);
-
 private:
+	void CheckFileIntagrity(Options* options);
+	bool CheckCrc(FILE* file);
 	unsigned long ReadCrcFromFile(FILE* file);
 	unsigned long ReadUncompressedSize(FILE* file);
 	unsigned long MakeCrc(FILE* file);
@@ -25,7 +23,9 @@ private:
 	void OutputCompressInfo(FILE* file );
 
 	char* ReadFileName(FILE* file);
-
+	void FillFilesFromDir (TList<char*>* files, const char* dirNAme);
+	char* GetName(char* path);
+	bool IsCompressedFile( char* fileName );
 	CrcMaker _crcMaker;
 	unsigned long _uncompressedFileSize;
 };

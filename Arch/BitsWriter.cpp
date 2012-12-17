@@ -62,21 +62,15 @@ void BitsWriter::UpdateCrc()
 
 void BitsWriter::WriteBeginOfFile(char* inputFileName)
 {
-	byte id1 = ID1;
-	byte id2 = ID2;
-	_buffer = id1;
-	WriteByte();
-	_buffer = id2;
-	WriteByte();
 	int nameSize = strlen(inputFileName) + 1;
 	for(int i = 0; i < nameSize; i++)
 	{
 		_buffer = inputFileName[i];
 		WriteByte();
+		if (_crcBufferSize == CRC_BUFFER_SIZE)
+		{
+			UpdateCrc();
+		}
 	}
-	//fwrite(&id1, 1, 1, _file);
-	//fwrite(&id2, 1, 1, _file);
-
-	//fwrite(inputFileName, sizeof(char), nameSize, _file);
 }
 

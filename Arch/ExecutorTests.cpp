@@ -52,11 +52,11 @@ TEST(ExecutorTest, ShouldListSeveralFiles)
 	executor.Execute(options);
 }
 
-TEST(ExecutorTest, ShouldRecursiveListDir)
+TEST(ExecutorTest, ShouldRecursiveCompressDir)
 {
 	Options* options = new Options();
 	options->Recursive = true;
-	options->List = true;
+	options->Code = true;
 	options->Dirs->Add("Tests");
 
 	ArchExecutor executor;

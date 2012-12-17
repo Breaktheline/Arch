@@ -40,7 +40,6 @@ bool BitsReader::CanReadFile()
 
 void BitsReader::SetStart()
 {
-	fseek(_file, 2, SEEK_SET);
 	char b;
 	int i = 0;
 	while ((b = fgetc(_file)) != '\0')
